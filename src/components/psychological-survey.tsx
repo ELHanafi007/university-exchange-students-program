@@ -2,27 +2,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
-// Define proper interfaces
-interface QuestionOption {
-  text: string;
-  insight: string;
-  recommendation?: string;
-  solution?: string;
-  benefit?: string;
-  action?: string;
-  nextStep?: string;
-}
-
-interface PsychologicalQuestion {
-  id: string;
-  type: string;
-  question: string;
-  subtext: string;
-  options: QuestionOption[];
-}
-
 // Psychological question bank - each question serves multiple purposes
-const psychologicalQuestions: PsychologicalQuestion[] = [
+const psychologicalQuestions = [
   {
     id: 'future-self',
     type: 'visualization',
@@ -34,10 +15,155 @@ const psychologicalQuestions: PsychologicalQuestion[] = [
         insight: "high-ambition, global-minded",
         recommendation: "Exchange programs in business hubs like Singapore, London, or New York"
       },
-      // ... rest of options remain the same
+      {
+        text: "Conducting groundbreaking research at a prestigious university or lab abroad",
+        insight: "academic-focused, research-driven", 
+        recommendation: "Research-focused exchanges in Germany, Switzerland, or Japan"
+      },
+      {
+        text: "Running my own startup with an international team and client base",
+        insight: "entrepreneurial, risk-tolerant",
+        recommendation: "Innovation ecosystems like Silicon Valley, Berlin, or Tel Aviv"
+      },
+      {
+        text: "Working remotely while exploring different cultures and countries",
+        insight: "location-independent, experience-seeking",
+        recommendation: "Programs with flexible schedules and multiple destination options"
+      },
+      {
+        text: "I haven't thought that far ahead yet - still figuring things out",
+        insight: "exploratory, needs guidance",
+        recommendation: "Structured programs with strong mentorship and career counseling"
+      }
     ]
   },
-  // ... rest of questions remain the same
+  {
+    id: 'barrier-diagnosis', 
+    type: 'obstacle-analysis',
+    question: "What's the REAL reason you haven't applied yet? Be brutally honest.",
+    subtext: "Identifying the actual barrier is the first step to overcoming it.",
+    options: [
+      {
+        text: "Financial concerns - I'm worried about costs and don't know about funding options",
+        insight: "financial-anxiety",
+        solution: "Scholarships cover 70%+ of students. We'll show you exactly how to fund it."
+      },
+      {
+        text: "Academic fears - Will credits transfer? Will it delay my graduation?",
+        insight: "academic-uncertainty", 
+        solution: "98% of credits transfer seamlessly. We have dedicated academic advisors."
+      },
+      {
+        text: "Confidence gap - I don't feel 'good enough' for competitive programs",
+        insight: "imposter-syndrome",
+        solution: "Most qualified students feel this way. Our acceptance rate is 85% for applicants."
+      },
+      {
+        text: "Family concerns - My family is worried about safety/culture/distance",
+        insight: "family-apprehension",
+        solution: "We provide family orientation sessions and 24/7 support systems."
+      },
+      {
+        text: "Information overload - The process seems too complicated and overwhelming",
+        insight: "analysis-paralysis",
+        solution: "We simplify everything into a 3-step process with personal guidance."
+      },
+      {
+        text: "I never seriously considered it an option for someone like me",
+        insight: "perception-barrier",
+        solution: "You're exactly who these programs are designed for. Let us show you why."
+      }
+    ]
+  },
+  {
+    id: 'motivation-levers',
+    type: 'value-alignment', 
+    question: "Which of these outcomes would make the biggest impact on your life?",
+    subtext: "This helps us tailor the experience to what matters most to you.",
+    options: [
+      {
+        text: "Building a global professional network that opens doors worldwide",
+        insight: "career-acceleration",
+        benefit: "Exchange students see 3x more job offers and 25% higher starting salaries"
+      },
+      {
+        text: "Gaining independence and confidence by thriving in a new environment",
+        insight: "personal-growth",
+        benefit: "97% of students report life-changing personal development"
+      },
+      {
+        text: "Accessing specialized courses and research opportunities unavailable here",
+        insight: "academic-enhancement",
+        benefit: "Learn from world experts and access cutting-edge facilities"
+      },
+      {
+        text: "Experiencing new cultures and making lifelong international friends",
+        insight: "cultural-enrichment", 
+        benefit: "Develop cultural intelligence - the #1 skill global employers seek"
+      },
+      {
+        text: "Proving to myself that I can succeed anywhere in the world",
+        insight: "self-validation",
+        benefit: "Build unshakable confidence that transforms every area of your life"
+      }
+    ]
+  },
+  {
+    id: 'support-assessment',
+    type: 'ecosystem-analysis',
+    question: "What kind of support system do you have around this decision?",
+    subtext: "Understanding your environment helps us provide the right resources.",
+    options: [
+      {
+        text: "Strong family support - they're excited and encouraging",
+        insight: "high-support",
+        action: "We'll equip your family with information to become your biggest cheerleaders"
+      },
+      {
+        text: "Mixed reactions - some support, some concerns from family/friends",
+        insight: "moderate-support",
+        action: "We provide family counseling sessions and success stories to address concerns"
+      },
+      {
+        text: "Lack of understanding - people around me don't see the value",
+        insight: "low-support",
+        action: "We connect you with alumni who faced similar challenges and succeeded"
+      },
+      {
+        text: "I haven't discussed it seriously with anyone yet",
+        insight: "undeclared-intent",
+        action: "We help you build a compelling case to present to your support network"
+      }
+    ]
+  },
+  {
+    id: 'readiness-evaluation',
+    type: 'commitment-gauge',
+    question: "On a scale of 1-10, how ready are you to take the first step?",
+    subtext: "Be honest - this isn't a test, it's a starting point for your journey.",
+    options: [
+      {
+        text: "1-3: Interested but need significant guidance and reassurance",
+        insight: "early-contemplation",
+        nextStep: "Let's start with our beginner's roadmap and success stories"
+      },
+      {
+        text: "4-6: Seriously considering but have specific questions/concerns", 
+        insight: "active-contemplation",
+        nextStep: "Perfect! Let's address your specific concerns with personalized solutions"
+      },
+      {
+        text: "7-8: Ready to move forward but need help with the application process",
+        insight: "preparation-stage",
+        nextStep: "Excellent! We'll guide you through each step of the application"
+      },
+      {
+        text: "9-10: I'm committed and just need the final push to apply",
+        insight: "action-ready",
+        nextStep: "Outstanding! Let's get your application submitted this week"
+      }
+    ]
+  }
 ]
 
 // Advanced micro-interactions
@@ -108,11 +234,11 @@ export function PsychologicalSurvey() {
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [showInsight, setShowInsight] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef(null)
 
   const progress = (currentStep / psychologicalQuestions.length) * 100
 
-  const handleAnswer = (optionIndex: number) => {
+  const handleAnswer = (optionIndex: number, questionId: string) => {
     setSelectedOption(optionIndex)
     const option = psychologicalQuestions[currentStep].options[optionIndex]
     
@@ -226,7 +352,7 @@ export function PsychologicalSurvey() {
                         borderColor: "rgba(34, 211, 238, 0.5)"
                       }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => handleAnswer(index)}
+                      onClick={() => handleAnswer(index, currentQuestion.id)}
                       disabled={showInsight}
                       className={`w-full text-left p-6 rounded-2xl border-2 transition-all duration-300 group ${
                         selectedOption === index 
@@ -298,9 +424,6 @@ export function PsychologicalSurvey() {
 }
 
 function TransformationSequence({ insights }: { insights: string[] }) {
-  // Log insights to actually use the parameter
-  console.log('User insights:', insights);
-  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       <motion.div 
@@ -314,8 +437,8 @@ function TransformationSequence({ insights }: { insights: string[] }) {
         </div>
         <h2 className="text-5xl font-bold mb-6">Your Path Is Clear</h2>
         <p className="text-xl mb-6 text-gray-700">
-          Based on your answers, we&apos;ve identified your unique strengths and opportunities. 
-          You&apos;re exactly the type of student who thrives in international environments.
+          Based on your answers, we've identified your unique strengths and opportunities. 
+          You're exactly the type of student who thrives in international environments.
         </p>
         <button className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-4 rounded-xl text-lg font-bold hover:from-green-600 hover:to-teal-600 transition-all duration-300">
           Start Your Application Journey
