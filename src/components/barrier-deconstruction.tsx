@@ -1,17 +1,41 @@
 'use client'
 import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 
-const barriersData = [
+// Define proper interfaces
+interface Solution {
+  title: string;
+  description: string;
+  action: string;
+  stat: string;
+  statLabel: string;
+}
+
+interface Testimonial {
+  quote: string;
+  student: string;
+  outcome: string;
+}
+
+interface BarrierData {
+  id: string;
+  title: string;
+  myth: string;
+  reality: string;
+  solutions: Solution[];
+  testimonial: Testimonial;
+}
+
+const barriersData: BarrierData[] = [
   {
     id: 'financial',
     title: "💰 Financial Barriers",
-    myth: "I can't afford to study abroad",
+    myth: "I can&apos;t afford to study abroad",
     reality: "87% of eligible students qualify for scholarships they never apply for",
     solutions: [
       {
         title: "Hidden Scholarship Calculator",
-        description: "Most students miss 3-5 scholarships they're automatically eligible for",
+        description: "Most students miss 3-5 scholarships they&apos;re automatically eligible for",
         action: "Check your instant eligibility score",
         stat: "$8,500",
         statLabel: "Average uncovered funding per student"
@@ -74,7 +98,7 @@ const barriersData = [
   {
     id: 'confidence',
     title: "😰 Confidence Gap",
-    myth: "I'm not good enough for competitive programs",
+    myth: "I&apos;m not good enough for competitive programs",
     reality: "Programs are designed for students exactly like you - they need diversity, not perfection",
     solutions: [
       {
@@ -82,7 +106,7 @@ const barriersData = [
         description: "Real-time assessment of your actual eligibility vs perceived barriers",
         action: "Take the 2-min reality check",
         stat: "85%",
-        statLabel: "Of 'unqualified' students actually qualify"
+        statLabel: "Of &apos;unqualified&apos; students actually qualify"
       },
       {
         title: "Peer Matching System",
@@ -100,7 +124,7 @@ const barriersData = [
       }
     ],
     testimonial: {
-      quote: "I almost didn't apply because I thought my grades were too average. Turns out they wanted my unique perspective, not perfect scores.",
+      quote: "I almost didn&apos;t apply because I thought my grades were too average. Turns out they wanted my unique perspective, not perfect scores.",
       student: "Sarah, Business → Singapore",
       outcome: "Now working as cultural consultant for Fortune 500 companies"
     }
@@ -108,7 +132,7 @@ const barriersData = [
   {
     id: 'family',
     title: "👪 Family Concerns",
-    myth: "My family won't support me going so far away",
+    myth: "My family won&apos;t support me going so far away",
     reality: "Families become the biggest supporters once they understand the safety nets and benefits",
     solutions: [
       {
@@ -141,7 +165,7 @@ const barriersData = [
   }
 ]
 
-function SolutionCard({ solution, index, isActive }: { solution: any; index: number; isActive: boolean }) {
+function SolutionCard({ solution, index, isActive }: { solution: Solution; index: number; isActive: boolean }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -191,7 +215,7 @@ export function BarrierDeconstruction() {
             <br />And How to Smash Through Them
           </h2>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            Every barrier has a solution. We've helped thousands of students overcome these exact concerns 
+            Every barrier has a solution. We&apos;ve helped thousands of students overcome these exact concerns 
             and unlock life-changing opportunities.
           </p>
         </motion.div>
@@ -244,12 +268,12 @@ export function BarrierDeconstruction() {
             {/* Solutions Grid */}
             <div className="grid gap-4">
               <h4 className="text-gray-900 text-xl font-bold">Proven Solutions That Work:</h4>
-              {currentBarrier.solutions.map((solution: any, index: number) => (
+              {currentBarrier.solutions.map((solution: Solution, solutionIndex: number) => (
                 <SolutionCard 
-                  key={index} 
+                  key={solutionIndex} 
                   solution={solution} 
-                  index={index}
-                  isActive={activeBarrier === index}
+                  index={solutionIndex}
+                  isActive={activeBarrier === solutionIndex}
                 />
               ))}
             </div>

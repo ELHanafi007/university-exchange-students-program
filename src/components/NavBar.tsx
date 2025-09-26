@@ -3,8 +3,22 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, useTransform, useSpring } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 
+// Define proper TypeScript interfaces
+interface SubItem {
+  name: string;
+  href: string;
+}
+
+interface NavItemType {
+  name: string;
+  href: string;
+  icon: string;
+  description: string;
+  subItems: SubItem[];
+}
+
 // Advanced navigation data with icons and submenus
-const navigationData = [
+const navigationData: NavItemType[] = [
   {
     name: 'Home',
     href: '#home',
@@ -160,7 +174,7 @@ function FloatingOrbs() {
 }
 
 // Animated Navigation Item
-function NavItem({ item, isActive, onClick }: { item: any; isActive: boolean; onClick: () => void }) {
+function NavItem({ item, isActive, onClick }: { item: NavItemType; isActive: boolean; onClick: () => void }) {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -219,7 +233,7 @@ function NavItem({ item, isActive, onClick }: { item: any; isActive: boolean; on
             <div className="text-cyan-400 text-sm font-medium">{item.description}</div>
             <div className="w-16 h-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full my-2" />
             <div className="flex flex-col gap-1">
-              {item.subItems.map((subItem: any, idx: number) => (
+              {item.subItems.map((subItem, idx) => (
                 <a
                   key={idx}
                   href={subItem.href}
@@ -241,7 +255,7 @@ export function UltimateNavbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
-  const navbarRef = useRef(null)
+  const navbarRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
 
   const { scrollY } = useScroll()
@@ -525,7 +539,7 @@ function NavigationIndicator() {
       transition={{ delay: 0.5 }}
     >
       <div className="flex flex-col items-center gap-4 p-4 bg-white/80 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
-        {navigationData.map((item, index) => {
+        {navigationData.map((item) => {
           const section = item.href.substring(1)
           const isActive = activeSection === section
 

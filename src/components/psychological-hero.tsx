@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'fram
 import { useRef, useState, useEffect } from 'react'
 
 export function PsychologicalHero() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
@@ -23,9 +23,15 @@ export function PsychologicalHero() {
 
   // Typing effect for psychological impact
   const [displayedText, setDisplayedText] = useState('')
-  const fullText = "The most successful students aren't smarter—they just had the courage to apply."
+  const fullText = "The most successful students aren&apos;t smarter—they just had the courage to apply."
+
+  // Client-side only state
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
+    
+    // Typing effect
     let i = 0
     const timer = setInterval(() => {
       if (i < fullText.length) {
@@ -35,8 +41,9 @@ export function PsychologicalHero() {
         clearInterval(timer)
       }
     }, 30)
+    
     return () => clearInterval(timer)
-  }, [])
+  }, [fullText])
 
   const handleMouseMove = (e: React.MouseEvent) => {
     mouseX.set(e.clientX)
@@ -107,8 +114,8 @@ export function PsychologicalHero() {
           🌍
         </motion.div>
 
-        {/* Particle system */}
-        {[...Array(50)].map((_, i) => (
+        {/* Particle system - ONLY RENDER ON CLIENT */}
+        {isClient && [...Array(50)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-30"
@@ -121,9 +128,9 @@ export function PsychologicalHero() {
               opacity: [0, 1, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 3 + (i % 3),
               repeat: Infinity,
-              delay: Math.random() * 5,
+              delay: (i % 5) * 0.5,
             }}
           />
         ))}
@@ -321,15 +328,17 @@ export function PsychologicalHero() {
       </motion.div>
 
       {/* Interactive Mouse Followers */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          x: cursorX,
-          y: cursorY,
-        }}
-      >
-        <div className="w-4 h-4 border-2 border-cyan-500 rounded-full"></div>
-      </motion.div>
+      {isClient && (
+        <motion.div
+          className="absolute pointer-events-none"
+          style={{
+            x: cursorX,
+            y: cursorY,
+          }}
+        >
+          <div className="w-4 h-4 border-2 border-cyan-500 rounded-full"></div>
+        </motion.div>
+      )}
     </section>
   )
 }
