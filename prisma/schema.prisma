@@ -1,0 +1,28 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model SurveyResponse {
+  id          String   @id @default(cuid())
+  faculty     String
+  year        String
+  gender      String?
+  knowsAboutProgram String
+  readsEmails String
+  interestedInAbroad String
+  triedApplying String
+  reasonNotApplied String?
+  otherReason String?
+  familySupport String
+  suggestions String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("survey_responses")
+}
